@@ -1,0 +1,20 @@
+buildConfiguration:
+  buildCommand: npm run build:local
+  installDependenciesStep:
+    command: npm install
+    requiredFiles:
+      - package.json
+      - package-lock.json
+      - .npmrc
+livePreviewConfiguration:
+  setupCommand: ":"
+siteStream:
+  id: site-entity
+  source: knowledgeGraph
+  fields:
+    - name
+  localization:
+    locales:
+      - en
+    primary: false
+  entityId: "7089236598532783488"
