@@ -1,17 +1,22 @@
 import {
   Matcher,
+  provideHeadless,
   SelectableStaticFilter,
   useSearchActions,
   useSearchState,
+  VerticalResults as VerticalResultsData,
 } from "@yext/search-headless-react";
 import {
   AppliedFilters,
   Coordinate,
+  DropdownItem,
   Facets,
+  FocusedItemData,
   Geolocation,
   MapboxMap,
   OnDragHandler,
   Pagination,
+  RenderEntityPreviews,
   ResultsCount,
   SearchBar,
   VerticalResults,
@@ -21,10 +26,12 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
+import { createCtx } from "../common/createContext";
+import Event from "../types/events";
 import EventCard from "./EventCard";
 import Loader from "./Loader";
-import { createCtx } from "../common/createContext";
 import MapPin from "./MapPin";
+import searchConfig from "./searchConfig";
 export interface Location {
   yextDisplayCoordinate?: Coordinate;
 }
@@ -78,10 +85,78 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
     },
     [filters, searchActions]
   );
+  const entityPreviewSearcher = provideHeadless({
+    ...searchConfig,
+    headlessId: "entity-preview-searcher",
+  });
 
+  const renderEntityPreviews: RenderEntityPreviews = (
+    autocompleteLoading: boolean,
+    verticalKeyToResults: Record<string, VerticalResultsData>,
+    dropdownItemProps: {
+      onClick: (
+        value: string,
+        _index: number,
+        itemData?: FocusedItemData
+      ) => void;
+      ariaLabel: (value: string) => string;
+    }
+  ): JSX.Element | null => {
+    const eventResults = verticalKeyToResults["events"]?.results.map(
+      (result) => result.rawData
+    ) as unknown as Event[];
+
+    return eventResults ? (
+      <div className="grid grid-cols-6 px-8  gap-2">
+        {eventResults.map((result) => (
+          <DropdownItem
+            key={result.id}
+            value={result.name}
+            onClick={() => history.pushState(null, "", `/${result.slug}`)}
+            ariaLabel={dropdownItemProps.ariaLabel}
+          >
+            <DropdownItem
+              className="border"
+              key={result.id}
+              value={result.name}
+              ariaLabel={dropdownItemProps.ariaLabel}
+            >
+              <a href={result.slug} className="text-center ">
+                {result.c_heroImage ? (
+                  <img
+                    src={result.c_heroImage.url}
+                    alt=""
+                    className="h-auto w-32 mx-auto aspect-square"
+                  />
+                ) : (
+                  result.c_photo && (
+                    <img
+                      src={result.c_photo.url}
+                      alt=""
+                      className="h-auto w-32 mx-auto aspect-square"
+                    />
+                  )
+                )}
+                <div className="text-sm h-10  mt-4">{result.name}</div>
+              </a>
+            </DropdownItem>
+          </DropdownItem>
+        ))}
+      </div>
+    ) : null;
+  };
   return (
     <>
-      <SearchBar placeholder="Search our Events" />
+      <SearchBar
+        placeholder="Search our Events"
+        visualAutocompleteConfig={{
+          entityPreviewSearcher: entityPreviewSearcher,
+          includedVerticals: ["events"],
+          renderEntityPreviews: renderEntityPreviews,
+          universalLimit: { events: 6 },
+          entityPreviewsDebouncingTime: 300,
+        }}
+      />
 
       {isLoading ? (
         <Loader />
