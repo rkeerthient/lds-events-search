@@ -4,8 +4,8 @@ const { ComponentsContentPath } = require("@yext/search-ui-react");
 
 module.exports = {
   content: [
-    "./src/**/*.{ts,tsx}",
-    "./lib/**/*.{js,jsx}",
+    "./src/**/*.{html,js,jsx,ts,tsx}",
+    "./node_modules/@yext/search-ui-react/**/*.{html,js,jsx,ts,tsx}",
     ComponentsContentPath,
   ],
   theme: {
