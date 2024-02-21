@@ -25,8 +25,6 @@ import { IoIosClose } from "react-icons/io";
 import EventCard from "./EventCard";
 import Loader from "./Loader";
 import MapPin from "./MapPin";
-import { useLocationsContext } from "../common/LocationsContext";
-import * as mapboxgl from "mapbox-gl";
 export interface Location {
   yextDisplayCoordinate?: Coordinate;
 }
@@ -38,7 +36,6 @@ type verticalKey = {
   verticalKey: string;
 };
 const EventSearch = ({ verticalKey }: verticalKey) => {
-  const { selectedLocation } = useLocationsContext();
   const searchActions = useSearchActions();
   const filters = useSearchState((state) => state.filters.static);
   const [isLoading, setIsLoading] = useState(true);

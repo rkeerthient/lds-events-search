@@ -4,7 +4,6 @@ import { CiShare2 } from "react-icons/ci";
 import { LiaDirectionsSolid } from "react-icons/lia";
 import { MdOutlineRsvp } from "react-icons/md";
 import Event from "../types/events";
-import { useLocationsContext } from "../common/LocationsContext";
 
 const EventCard = ({ result }: CardProps<Event>) => {
   const { name } = result;
@@ -17,7 +16,6 @@ const EventCard = ({ result }: CardProps<Event>) => {
     address,
     isFreeEvent,
   } = result.rawData;
-  const { setSelectedLocation } = useLocationsContext();
   const getLongDate = (input: string) => {
     let currDate = new Date(input);
     const month = currDate.toLocaleString("default", {
@@ -39,10 +37,7 @@ const EventCard = ({ result }: CardProps<Event>) => {
       className="border flex  justify-between gap-4 p-4 hover:bg-gray-100 hover:cursor-pointer"
       // onMouseLeave={(e) => console.log(`out`)}
     >
-      <div
-        className="flex flex-col "
-        onClick={() => setSelectedLocation(result)}
-      >
+      <div className="flex flex-col ">
         <div className="flex w-full">
           <div className="flex flex-col justify-between gap-4 ">
             <a
