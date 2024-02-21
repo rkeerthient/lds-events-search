@@ -1,32 +1,32 @@
 import {
+  Matcher,
+  SelectableStaticFilter,
   useSearchActions,
   useSearchState,
-  SelectableStaticFilter,
-  Matcher,
 } from "@yext/search-headless-react";
 import {
-  OnDragHandler,
-  ResultsCount,
   AppliedFilters,
-  Pagination,
-  MapboxMap,
-  VerticalResults,
-  LocationBias,
   Coordinate,
-  MapboxMapProps,
-  StandardCard,
-  SearchBar,
   Facets,
-  StandardFacets,
-  ApplyFiltersButton,
+  Geolocation,
+  MapboxMap,
+  MapboxMapProps,
+  OnDragHandler,
+  Pagination,
+  ResultsCount,
+  SearchBar,
+  VerticalResults,
 } from "@yext/search-ui-react";
 import { LngLat, LngLatBounds } from "mapbox-gl";
-import * as React from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
+import * as React from "react";
 import { useEffect, useState } from "react";
+import { IoIosClose } from "react-icons/io";
+import EventCard from "./EventCard";
 import Loader from "./Loader";
 import MapPin from "./MapPin";
-import EventCard from "./EventCard";
+import { useLocationsContext } from "../common/LocationsContext";
+import * as mapboxgl from "mapbox-gl";
 export interface Location {
   yextDisplayCoordinate?: Coordinate;
 }
@@ -38,6 +38,7 @@ type verticalKey = {
   verticalKey: string;
 };
 const EventSearch = ({ verticalKey }: verticalKey) => {
+  const { selectedLocation } = useLocationsContext();
   const searchActions = useSearchActions();
   const filters = useSearchState((state) => state.filters.static);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +75,7 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
 
   return (
     <>
-      <SearchBar />
+      <SearchBar placeholder="Search our Events" />
 
       {isLoading ? (
         <Loader />
@@ -93,15 +94,27 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
               </div>
               {showFacets ? (
                 <div className="absolute inset-0 bg-white h-[95vh]">
+                  <IoIosClose
+                    onClick={(e) => setShowFacets(false)}
+                    className="ml-auto h-8 w-8 mr-4 hover:cursor-pointer hover:border"
+                  />
                   <Facets
                     customCssClasses={{ facetsContainer: "mr-10" }}
                     searchOnChange={true}
                   />
-                  <div
-                    className="hover:cursor-pointer px-4 py-1 mt-4 bg-[#027da5] text-white w-fit"
-                    onClick={(e) => setShowFacets(!showFacets)}
-                  >
-                    Apply
+                  <div className="flex flex-row gap-4 mb-8">
+                    <div
+                      className="hover:cursor-pointer px-4 py-1 mt-4 bg-[#027da5] text-white w-fit"
+                      onClick={(e) => setShowFacets(!showFacets)}
+                    >
+                      Apply
+                    </div>
+                    <div
+                      className="hover:cursor-pointer px-4 py-1 mt-4 text-[#027da5] w-fit hover:underline"
+                      onClick={(e) => setShowFacets(false)}
+                    >
+                      Cancel
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -115,13 +128,16 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
                         verticalResultsContainer: "flex flex-col gap-4",
                       }}
                     />
-                    <Pagination />
+                    <div className="mt-4">
+                      <Pagination />
+                      <Geolocation
+                        customCssClasses={{
+                          iconContainer: "none",
+                          geolocationContainer: "flex flex-col lg:flex-col",
+                        }}
+                      />
+                    </div>
                   </div>
-                  <LocationBias
-                    customCssClasses={{
-                      locationBiasContainer: "flex flex-col",
-                    }}
-                  />
                 </>
               )}
             </div>

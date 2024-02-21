@@ -27,10 +27,7 @@ const Header = () => {
 
   return (
     <>
-      <img
-        src="https://locationsearch_familysearch_org.yextpages.net/static/assets/images/headernew.png"
-        alt=""
-      />
+      <img src="https://i.imgur.com/EnjRgS1.png" alt="" />
     </>
   );
 };
