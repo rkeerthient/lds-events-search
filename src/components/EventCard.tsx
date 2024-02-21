@@ -1,9 +1,7 @@
 import { CardProps } from "@yext/search-ui-react";
 import Event from "../types/events";
-import { BsClock, BsFillClockFill, BsGlobe } from "react-icons/bs";
+import { BsClock, BsGlobe } from "react-icons/bs";
 const EventCard = ({ result }: CardProps<Event>) => {
-  console.log(JSON.stringify(result));
-
   const { name } = result;
   const {
     description,

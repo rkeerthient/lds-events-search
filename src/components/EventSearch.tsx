@@ -105,18 +105,24 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
                   </div>
                 </div>
               ) : (
-                <div>
-                  <ResultsCount />
-                  <AppliedFilters />
-                  <VerticalResults
-                    CardComponent={EventCard}
+                <>
+                  <div>
+                    <ResultsCount />
+                    <AppliedFilters />
+                    <VerticalResults
+                      CardComponent={EventCard}
+                      customCssClasses={{
+                        verticalResultsContainer: "flex flex-col gap-4",
+                      }}
+                    />
+                    <Pagination />
+                  </div>
+                  <LocationBias
                     customCssClasses={{
-                      verticalResultsContainer: "flex flex-col gap-4",
+                      locationBiasContainer: "flex flex-col",
                     }}
                   />
-                  <Pagination />
-                  <LocationBias />
-                </div>
+                </>
               )}
             </div>
             <div className=" w-3/5 h-screen">
