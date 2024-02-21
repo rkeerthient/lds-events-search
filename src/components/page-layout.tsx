@@ -19,7 +19,7 @@ const PageLayout = ({ _site, children }: Props) => {
       <div className="py-8">
         <SearchHeadlessProvider searcher={provideHeadless(searchConfig)}>
           {children}
-        </SearchHeadlessProvider>{" "}
+        </SearchHeadlessProvider>
       </div>
 
       <Footer _site={_site}></Footer>

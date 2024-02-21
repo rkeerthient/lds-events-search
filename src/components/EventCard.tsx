@@ -4,8 +4,12 @@ import { CiShare2 } from "react-icons/ci";
 import { LiaDirectionsSolid } from "react-icons/lia";
 import { MdOutlineRsvp } from "react-icons/md";
 import Event from "../types/events";
+import { useMapContext } from "./EventSearch";
+import { useEffect } from "react";
 
 const EventCard = ({ result }: CardProps<Event>) => {
+  const { hoveredLocationId, setHoveredLocationId, clicked, setClicked } =
+    useMapContext();
   const { name } = result;
   const {
     description,
@@ -15,6 +19,7 @@ const EventCard = ({ result }: CardProps<Event>) => {
     landingPageUrl,
     address,
     isFreeEvent,
+    id,
   } = result.rawData;
   const getLongDate = (input: string) => {
     let currDate = new Date(input);
@@ -34,8 +39,16 @@ const EventCard = ({ result }: CardProps<Event>) => {
 
   return (
     <div
-      className="border flex  justify-between gap-4 p-4 hover:bg-gray-100 hover:cursor-pointer"
-      // onMouseLeave={(e) => console.log(`out`)}
+      onClick={() => setClicked(id)}
+      onMouseEnter={() => {
+        setHoveredLocationId(id), setClicked("");
+      }}
+      onMouseLeave={() => {
+        setHoveredLocationId(""), setClicked("");
+      }}
+      className={`flex justify-between border-y p-4   ${
+        hoveredLocationId === id ? "bg-gray-200" : ""
+      }`}
     >
       <div className="flex flex-col ">
         <div className="flex w-full">
@@ -44,7 +57,7 @@ const EventCard = ({ result }: CardProps<Event>) => {
               href={landingPageUrl}
               className="text-lg text-[#348daf] flex gap-4 items-center hover:underline"
             >
-              {name}
+              {result.id} {name}
               {isFreeEvent && (
                 <span className="bg-[#348daf] text-xs p-[2px] text-white">
                   Free

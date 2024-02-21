@@ -1,5 +1,3 @@
-
-
 export type Address = {
   line1: string;
   city: string;

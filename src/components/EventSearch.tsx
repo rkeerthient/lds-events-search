@@ -10,7 +10,6 @@ import {
   Facets,
   Geolocation,
   MapboxMap,
-  MapboxMapProps,
   OnDragHandler,
   Pagination,
   ResultsCount,
@@ -24,18 +23,28 @@ import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/io";
 import EventCard from "./EventCard";
 import Loader from "./Loader";
+import { createCtx } from "../common/createContext";
 import MapPin from "./MapPin";
 export interface Location {
   yextDisplayCoordinate?: Coordinate;
 }
 
-const mapboxOptions: MapboxMapProps<Location>["mapboxOptions"] = {
-  zoom: 10,
+type MapContextType = {
+  hoveredLocationId: string;
+  setHoveredLocationId: (value: string) => void;
+  clicked: string;
+  setClicked: (value: string) => void;
 };
+
+export const [useMapContext, MapContextProvider] = createCtx<MapContextType>(
+  "Attempted to call useMapContext outside of MapContextProvider"
+);
 type verticalKey = {
   verticalKey: string;
 };
 const EventSearch = ({ verticalKey }: verticalKey) => {
+  const [hoveredLocationId, setHoveredLocationId] = useState("");
+  const [clicked, setClicked] = useState("");
   const searchActions = useSearchActions();
   const filters = useSearchState((state) => state.filters.static);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +86,14 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
       {isLoading ? (
         <Loader />
       ) : (
-        <div>
+        <MapContextProvider
+          value={{
+            hoveredLocationId,
+            setHoveredLocationId,
+            clicked,
+            setClicked,
+          }}
+        >
           <div className="flex flex-row">
             <div
               className="flex flex-col w-2/5 p-4 overflow-scroll relative"
@@ -140,17 +156,37 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
             </div>
             <div className=" w-3/5 h-screen">
               <MapboxMap
-                mapboxOptions={{ zoom: 4 }}
-                mapboxAccessToken={import.meta.env.YEXT_PUBLIC_MAP_API_KEY}
-                PinComponent={MapPin}
-                onDrag={onDrag}
+                mapboxOptions={{
+                  zoom: 20,
+                }}
+                mapboxAccessToken={
+                  import.meta.env.YEXT_PUBLIC_MAP_API_KEY || ""
+                }
+                PinComponent={(props) => (
+                  <MapPin
+                    {...props}
+                    hoveredLocationId={hoveredLocationId}
+                    setHoveredLocationId={setHoveredLocationId}
+                    clicked={clicked}
+                    setClicked={setClicked}
+                  />
+                )}
               />
             </div>
           </div>
-        </div>
+        </MapContextProvider>
       )}
     </>
   );
 };
 
 export default EventSearch;
+const createPopUp1 = (data: any) => {
+  data = data;
+  return `<div 
+  > <h3 class="uppercase bembo text-sm font-normal mb-2.5">
+  ${data.name}
+</h3>
+ 
+</div>`;
+};
