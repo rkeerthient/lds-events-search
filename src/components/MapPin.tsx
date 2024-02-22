@@ -49,9 +49,6 @@ const MapPin: React.FC<MapPinProps> = ({
     new Popup({ offset: 15 }).on("close", () => setActive(false))
   );
   useEffect(() => {
-    console.log(clicked);
-  }, [clicked]);
-  useEffect(() => {
     if (active && location.yextDisplayCoordinate) {
       const mapboxCoordinate = transformToMapboxCoord(
         location.yextDisplayCoordinate
