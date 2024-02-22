@@ -15,10 +15,10 @@ type Props = {
   _site?: Site;
   children?: React.ReactNode;
 };
-const chatConfig: ChatConfig = {
-  apiKey: import.meta.env.YEXT_PUBLIC_CHAT_APIKEY,
-  botId: import.meta.env.YEXT_PUBLIC_CHAT_BOTID,
-};
+// const chatConfig: ChatConfig = {
+//   apiKey: import.meta.env.YEXT_PUBLIC_CHAT_APIKEY,
+//   botId: import.meta.env.YEXT_PUBLIC_CHAT_BOTID,
+// };
 const PageLayout = ({ _site, children }: Props) => {
   const [showChat, setShowChat] = useState(false);
 
@@ -31,7 +31,7 @@ const PageLayout = ({ _site, children }: Props) => {
         </SearchHeadlessProvider>
       </div>
       <Footer _site={_site}></Footer>
-      <ChatHeadlessProvider config={chatConfig}>
+      {/* <ChatHeadlessProvider config={chatConfig}>
         <ChatPopUp
           title="LDS Chat"
           stream={false}
@@ -57,7 +57,7 @@ const PageLayout = ({ _site, children }: Props) => {
             },
           }}
         />
-      </ChatHeadlessProvider>
+      </ChatHeadlessProvider> */}
     </div>
   );
 };
