@@ -112,7 +112,9 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
           <DropdownItem
             key={result.id}
             value={result.name}
-            onClick={() => history.pushState(null, "", `/${result.slug}`)}
+            // onClick={() =>
+            //   history.pushState(null, "", `/${result.landingPageUrl}`)
+            // }
             ariaLabel={dropdownItemProps.ariaLabel}
           >
             <DropdownItem
@@ -121,7 +123,7 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
               value={result.name}
               ariaLabel={dropdownItemProps.ariaLabel}
             >
-              <a href={result.slug} className="text-center ">
+              <a href={`${result.landingPageUrl}`} className="text-center ">
                 {result.c_heroImage ? (
                   <img
                     src={result.c_heroImage.url}
