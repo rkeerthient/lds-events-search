@@ -57,7 +57,7 @@ const EventCard = ({ result }: CardProps<Event>) => {
               href={landingPageUrl}
               className="text-lg text-[#348daf] flex gap-4 items-center hover:underline"
             >
-              {result.id} {name}
+              {name}
               {isFreeEvent && (
                 <span className="bg-[#348daf] text-xs p-[2px] text-white">
                   Free
