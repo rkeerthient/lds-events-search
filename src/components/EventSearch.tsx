@@ -123,7 +123,11 @@ const EventSearch = ({ verticalKey }: verticalKey) => {
               value={result.name}
               ariaLabel={dropdownItemProps.ariaLabel}
             >
-              <a href={`${result.landingPageUrl}`} className="text-center ">
+              <a
+                href={`${result.landingPageUrl}`}
+                className="text-center "
+                target="_blanks"
+              >
                 {result.c_heroImage ? (
                   <img
                     src={result.c_heroImage.url}
